@@ -37,13 +37,10 @@ export default {
       videos: [],
       reformattedSearchString: '',
       api: {
-        baseUrl: 'https://www.googleapis.com/youtube/v3/search?',
-        part: 'snippet',
-        type: 'video',
+        baseUrl: 'http://localhost:8080/subreddit?',
         order: 'viewCount',
         maxResults: 12,
         q: '',
-        key: 'AIzaSyARzgy4VD5utPpe9f-hsxQYjFhEIPzNmeA',
         prevPageToken: '',
         nextPageToken: ''
       }
@@ -53,20 +50,20 @@ export default {
     search(searchParams) {
       this.reformattedSearchString = searchParams.join(' ');
       this.api.q = searchParams.join('+');
-      const { baseUrl, part, type, order, maxResults, q, key } = this.api;
-      const apiUrl = `${baseUrl}part=${part}&type=${type}&order=${order}&q=${q}&maxResults=${maxResults}&key=${key}`;
+      const { baseUrl,  order, maxResults, q, key } = this.api;
+      const apiUrl = `${baseUrl}&srname=${q}`;
       this.getData(apiUrl);
     },
 
     prevPage() {
-      const { baseUrl, part, type, order, maxResults, q, key, prevPageToken } = this.api;
-      const apiUrl = `${baseUrl}part=${part}&type=${type}&order=${order}&q=${q}&maxResults=${maxResults}&key=${key}&pageToken=${prevPageToken}`;
+      const { baseUrl, order, maxResults, q,  prevPageToken } = this.api;
+      const apiUrl = `${baseUrl}&srname=${q}`;
       this.getData(apiUrl);
     },
 
     nextPage() {
-      const { baseUrl, part, type, order, maxResults, q, key, nextPageToken } = this.api;
-      const apiUrl = `${baseUrl}part=${part}&type=${type}&order=${order}&q=${q}&maxResults=${maxResults}&key=${key}&pageToken=${nextPageToken}`;
+      const { baseUrl,  order, maxResults, q, key, nextPageToken } = this.api;
+      const apiUrl = `${baseUrl}&srname=${q}`;
       this.getData(apiUrl);
     },
 
@@ -78,7 +75,7 @@ export default {
           this.api.prevPageToken = res.data.prevPageToken;
           this.api.nextPageToken = res.data.nextPageToken;
         })
-        .catch(error => console.log(error));
+        .catch(error => console.log(error+apiUrl));
     }
   }
 };
