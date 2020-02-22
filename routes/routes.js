@@ -1,7 +1,6 @@
 var https = require('https')
 
 function filterContent(body) {
-  console.log(body)
   var data = JSON.parse(body)
   var pruned = {}
   pruned['after'] = data['data']['after']
@@ -30,12 +29,21 @@ function subRedditProcessor(client_req, client_res) {
   console.log('serve: ' + client_req.url);
   console.log('subredditName: '+client_req.query['srname'])
   var client_headers = client_req.headers
-  console.log(client_headers)
   client_headers.host = 'www.reddit.com'
+  var before = client_req.query['prev']
+  var after = client_req.query['next']
+  var  path = '/r/'+client_req.query['srname']+'/.json?limit=20'
+  if (before!='undefined') {
+    path += '&before='+before
+  }
+  if (after!='undefined') {
+    path += '&after='+after
+  }
+
   var options = {
     hostname: 'www.reddit.com',
     port: 443,
-    path:'/r/'+client_req.query['srname']+'/.json?limit=20',
+    path:path,
     method: client_req.method,
     headers: {
       accept:'application/json',
@@ -47,10 +55,8 @@ function subRedditProcessor(client_req, client_res) {
     let body = '';
     res.on('data',(chunk) => {
       body += chunk.toString();
-      console.log(body)
     })
     res.on('end',() => {
-      console.log(body)
       if (res.statusCode==200) {
         client_res.write(filterContent(body))
       } else {

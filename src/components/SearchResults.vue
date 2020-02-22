@@ -25,27 +25,27 @@
     </div>
 
     <div class="card-columns" v-if="displayMode === 'grid'">
-      <div class="card" v-bind:key="item.name" v-for="item in videos">
-        <VideoGridItem v-bind:video="item"/>
+      <div class="card" v-bind:key="item.name" v-for="item in items">
+        <GridItem v-bind:item="item"/>
       </div>
     </div>
     <div v-else>
-      <div class="card mb-2" v-bind:key="item.name" v-for="item in videos">
-        <VideoListItem v-bind:video="item"/>
+      <div class="card mb-2" v-bind:key="item.name" v-for="item in items">
+        <ListItem v-bind:item="item"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import VideoListItem from './VideoListItem';
-import VideoGridItem from './VideoGridItem';
+import ListItem from './ListItem';
+import GridItem from './GridItem';
 
 export default {
   name: 'SearchResults',
   components: {
-    VideoListItem,
-    VideoGridItem
+    ListItem,
+    GridItem
   },
   data() {
     return {
@@ -58,7 +58,7 @@ export default {
       this.displayMode = displayMode;
     }
   },
-  props: ['videos', 'reformattedSearchString']
+  props: ['items', 'reformattedSearchString']
 };
 </script>
 

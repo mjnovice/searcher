@@ -1,5 +1,5 @@
 {
-  "name": "youtube-search-app",
+  "name": "reddit-search-app",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "start": "node server.js",
     "deploy": "node ./node_modules/vue-gh-pages/index.js"
   },
-  "homepage": "https://github.com/log2e/youtube-search-app",
+  "homepage": "https://github.com/mjnovice/searcher",
   "dependencies": {
     "axios": "^0.18.0",
     "express": "^4.17.1",

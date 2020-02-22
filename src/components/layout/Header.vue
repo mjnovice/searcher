@@ -3,8 +3,8 @@
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark mb-5">
       <div class="container">
         <a class="navbar-brand" href="#">
-          <i class="fab fa-youtube fa-2x"></i>
-          <span class="ml-3">YouTube Search</span>
+          <i class="fab fa-reddit fa-2x"></i>
+          <span class="ml-3">Reddit Feed</span>
         </a>        
       </div>
     </nav>    

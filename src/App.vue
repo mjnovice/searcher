@@ -3,12 +3,12 @@
     <Header/>
     <SearchForm v-on:search="search"/>
     <SearchResults
-      v-if="videos.length > 0"
-      v-bind:videos="videos"
+      v-if="items.length > 0"
+      v-bind:items="items"
       v-bind:reformattedSearchString="reformattedSearchString"
     />
     <Pagination
-      v-if="videos.length > 0"
+      v-if="items.length > 0"
       v-bind:prevPageToken="api.prevPageToken"
       v-bind:nextPageToken="api.nextPageToken"
       v-on:prev-page="prevPage"
@@ -34,7 +34,7 @@ export default {
   },
   data() {
     return {
-      videos: [],
+      items: [],
       reformattedSearchString: '',
       api: {
         baseUrl: 'http://localhost:8080/subreddit?',
@@ -57,13 +57,13 @@ export default {
 
     prevPage() {
       const { baseUrl, order, maxResults, q,  prevPageToken, nextPageToken} = this.api;
-      const apiUrl = `${baseUrl}&srname=${q}&prev=${prevPageToken}&next=${nextPageToken}`;
+      const apiUrl = `${baseUrl}&srname=${q}&prev=${prevPageToken}`;
       this.getData(apiUrl);
     },
 
     nextPage() {
       const { baseUrl,  order, maxResults, q, key, prevPageToken, nextPageToken } = this.api;
-      const apiUrl = `${baseUrl}&srname=${q}&prev=${prevPageToken}&next=${nextPageToken}`;
+      const apiUrl = `${baseUrl}&srname=${q}&next=${nextPageToken}`;
       this.getData(apiUrl);
     },
 
@@ -74,7 +74,7 @@ export default {
 })
         .then(res => {
 console.log(res);
-          this.videos = res.data.items;
+          this.items = res.data.items;
           this.api.prevPageToken = res.data.before;
           this.api.nextPageToken = res.data.after;
         })
