@@ -37,7 +37,7 @@ export default {
       items: [],
       reformattedSearchString: '',
       api: {
-        baseUrl: 'http://localhost:8080/subreddit?',
+        baseUrl: 'https://stormy-sea-37300.herokuapp.com/subreddit?',
         order: 'viewCount',
         maxResults: 12,
         q: '',
