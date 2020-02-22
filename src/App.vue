@@ -56,13 +56,13 @@ export default {
     },
 
     prevPage() {
-      const { baseUrl, order, maxResults, q,  prevPageToken } = this.api;
+      const { baseUrl, order, maxResults, q,  prevPageToken, nextPageToken} = this.api;
       const apiUrl = `${baseUrl}&srname=${q}`;
       this.getData(apiUrl);
     },
 
     nextPage() {
-      const { baseUrl,  order, maxResults, q, key, nextPageToken } = this.api;
+      const { baseUrl,  order, maxResults, q, key, prevPageToken, nextPageToken } = this.api;
       const apiUrl = `${baseUrl}&srname=${q}`;
       this.getData(apiUrl);
     },
