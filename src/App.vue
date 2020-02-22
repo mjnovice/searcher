@@ -73,9 +73,10 @@ export default {
     headers: {'Accept': 'application/json'}
 })
         .then(res => {
-          this.videos = res.items;
-          this.api.prevPageToken = res.before;
-          this.api.nextPageToken = res.after;
+console.log(res);
+          this.videos = res.data.items;
+          this.api.prevPageToken = res.data.before;
+          this.api.nextPageToken = res.data.after;
         })
         .catch(error => console.log(error+apiUrl));
     }
