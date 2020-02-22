@@ -50,30 +50,32 @@ export default {
     search(searchParams) {
       this.reformattedSearchString = searchParams.join(' ');
       this.api.q = searchParams.join('+');
-      const { baseUrl,  order, maxResults, q, key } = this.api;
+      const { baseUrl,  order, maxResults, q } = this.api;
       const apiUrl = `${baseUrl}&srname=${q}`;
       this.getData(apiUrl);
     },
 
     prevPage() {
       const { baseUrl, order, maxResults, q,  prevPageToken, nextPageToken} = this.api;
-      const apiUrl = `${baseUrl}&srname=${q}`;
+      const apiUrl = `${baseUrl}&srname=${q}&prev=${prevPageToken}&next=${nextPageToken}`;
       this.getData(apiUrl);
     },
 
     nextPage() {
       const { baseUrl,  order, maxResults, q, key, prevPageToken, nextPageToken } = this.api;
-      const apiUrl = `${baseUrl}&srname=${q}`;
+      const apiUrl = `${baseUrl}&srname=${q}&prev=${prevPageToken}&next=${nextPageToken}`;
       this.getData(apiUrl);
     },
 
     getData(apiUrl) {
       axios
-        .get(apiUrl)
+        .get(apiUrl, {
+    headers: {'Accept': 'application/json'}
+})
         .then(res => {
-          this.videos = res.data.items;
-          this.api.prevPageToken = res.data.prevPageToken;
-          this.api.nextPageToken = res.data.nextPageToken;
+          this.videos = res.items;
+          this.api.prevPageToken = res.before;
+          this.api.nextPageToken = res.after;
         })
         .catch(error => console.log(error+apiUrl));
     }

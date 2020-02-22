@@ -1,24 +1,63 @@
 var https = require('https')
 
+function filterContent(body) {
+  console.log(body)
+  var data = JSON.parse(body)
+  var pruned = {}
+  pruned['after'] = data['data']['after']
+  pruned['before'] = data['data']['before']
+  pruned['items'] = []
+  originalItems = data['data']['children']
+  originalItems.forEach(function(originalItem){
+    var item = originalItem['data']
+    var prunedItem = {
+      'title':item['title'],
+      'downs':item['downs'],
+      'ups':item['ups'],
+      'url':item['url'],
+      'author':item['author'],
+      'selftext':item['selftext'],
+      'permalink':item['permalink'],
+      'name':item['name'],
+      'created':item['created']
+    }
+    pruned['items'].push(prunedItem)
+  })
+  return JSON.stringify(pruned)
+}
+
 function subRedditProcessor(client_req, client_res) {
   console.log('serve: ' + client_req.url);
-  console.log('param: '+client_req.query['srname'])
+  console.log('subredditName: '+client_req.query['srname'])
   var client_headers = client_req.headers
-  client_headers.host = 'www.googleapis.com'
+  console.log(client_headers)
+  client_headers.host = 'www.reddit.com'
   var options = {
-    hostname: 'www.googleapis.com',
+    hostname: 'www.reddit.com',
     port: 443,
-    path:'/youtube/v3/search?part=snippet&type=video&order=viewCount&maxResults=12&key=AIzaSyARzgy4VD5utPpe9f-hsxQYjFhEIPzNmeA&q='+client_req.query['srname'],
+    path:'/r/'+client_req.query['srname']+'/.json?limit=20',
     method: client_req.method,
-    headers: client_headers
+    headers: {
+      accept:'application/json',
+     'user-agent':client_headers['user-agent']
+    }
   };
-
   var proxy = https.request(options, function (res) {
-    console.log(client_req.headers)
-    client_res.writeHead(res.statusCode, res.headers)
-    res.pipe(client_res, {
-      end: true
-    });
+    client_res.writeHead(res.statusCode)
+    let body = '';
+    res.on('data',(chunk) => {
+      body += chunk.toString();
+      console.log(body)
+    })
+    res.on('end',() => {
+      console.log(body)
+      if (res.statusCode==200) {
+        client_res.write(filterContent(body))
+      } else {
+        client_res.write(body)
+      }
+      client_res.end()
+    })
   });
 
   client_req.pipe(proxy, {
