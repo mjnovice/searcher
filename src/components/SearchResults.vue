@@ -26,26 +26,24 @@
 
     <div class="card-columns" v-if="displayMode === 'grid'">
       <div class="card" v-bind:key="item.name" v-for="item in items">
-        <GridItem v-bind:item="item"/>
+        <Item v-bind:item="item"/>
       </div>
     </div>
     <div v-else>
       <div class="card mb-2" v-bind:key="item.name" v-for="item in items">
-        <ListItem v-bind:item="item"/>
+        <Item v-bind:item="item"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ListItem from './ListItem';
-import GridItem from './GridItem';
+import Item from './Item';
 
 export default {
   name: 'SearchResults',
   components: {
-    ListItem,
-    GridItem
+    Item
   },
   data() {
     return {

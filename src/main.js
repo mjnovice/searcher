@@ -6,7 +6,9 @@ Vue.config.productionTip = false
 
 Vue.filter('formatDate', function (value) {
   if (!value) return ''
-  return moment(value.toString()).format('MM/DD/YYYY hh:mm')
+  var date = moment.unix(value)
+  if (!date.isValid()) return ''
+  return moment(date).fromNow();
 })
 
 new Vue({
