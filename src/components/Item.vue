@@ -8,7 +8,7 @@
 
     <div class="card-body">
       <h5 class="card-title">
-        {{ item.title }}     
+        {{ item.title }}
       </h5>
       <small
         class="card-subtitle mb-2 text-muted"

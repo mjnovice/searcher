@@ -1,29 +1,6 @@
 var https = require('https')
 
-function filterContent(body) {
-  var data = JSON.parse(body)
-  var pruned = {}
-  pruned['after'] = data['data']['after']
-  pruned['before'] = data['data']['before']
-  pruned['items'] = []
-  originalItems = data['data']['children']
-  originalItems.forEach(function(originalItem){
-    var item = originalItem['data']
-    var prunedItem = {
-      'title':item['title'],
-      'downs':item['downs'],
-      'ups':item['ups'],
-      'url':item['url'],
-      'author':item['author'],
-      'selftext':item['selftext'],
-      'permalink':item['permalink'],
-      'name':item['name'],
-      'created':item['created']
-    }
-    pruned['items'].push(prunedItem)
-  })
-  return JSON.stringify(pruned)
-}
+var filters = require('../filters/filter.js')
 
 function subRedditProcessor(client_req, client_res) {
   console.log('serve: ' + client_req.url);
@@ -58,7 +35,7 @@ function subRedditProcessor(client_req, client_res) {
     })
     res.on('end',() => {
       if (res.statusCode==200) {
-        client_res.write(filterContent(body))
+        client_res.write(filters.filterContent(body))
       } else {
         client_res.write(body)
       }
@@ -70,6 +47,7 @@ function subRedditProcessor(client_req, client_res) {
     end: true
   });
 }
+
 const appRouter = (app, fs) => {
 
     // default route
