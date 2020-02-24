@@ -2,6 +2,8 @@
   <div id="app">
     <Header/>
     <SearchForm v-on:search="search"/>
+    <pulse-loader :loading="searching" :color="'#cc181e'" :size="'45px'"></pulse-loader>
+
     <div v-if="items===null">
       <center>
         <h3>
@@ -32,7 +34,7 @@ import SearchForm from './components/SearchForm';
 import SearchResults from './components/SearchResults';
 import Pagination from './components/Pagination';
 import axios from 'axios';
-
+import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 export default {
   name: 'app',
   components: {
@@ -44,6 +46,7 @@ export default {
   data() {
     return {
       items: [],
+      searching: false,
       reformattedSearchString: '',
       api: {
         //baseUrl: 'https://stormy-sea-37300.herokuapp.com/subreddit?',
@@ -62,6 +65,7 @@ export default {
       this.api.q = searchParams.join('+');
       const { baseUrl,  order, maxResults, q } = this.api;
       const apiUrl = `${baseUrl}&srname=${q}`;
+      this.searching = true;
       this.getData(apiUrl);
     },
 
@@ -87,12 +91,14 @@ export default {
           this.items = res.data.items;
           this.api.prevPageToken = res.data.before;
           this.api.nextPageToken = res.data.after;
+          this.searching = false;
         })
         .catch(error => {
           this.items = null;
           this.api.prevPageToken = null;
           this.api.nextPageToken = null;
           console.log(error+apiUrl)
+          this.searching = false;
         });
     }
   }
