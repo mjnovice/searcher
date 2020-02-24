@@ -19,8 +19,9 @@
         >u/{{ item.author }}</a> {{ item.created | formatDate }}
      </small>
       <p class="text-muted"> 
-        <i class="fas fa-caret-up">{{item.ups}}</i>
-        <i class="fas fa-caret-down">{{item.downs}}</i> 
+        <i class="fas fa-thumbs-up">{{item.ups}}</i>
+    <span class="fa-layers-text fa-inverse" data-fa-transform="shrink-8 down-3" style="font-weight:900">{{item.ups}}</span>
+        <i class="fas fa-thumbs-down">{{item.downs}}</i> 
 
       </p>
       <p class="card-text text-muted">{{ item.selftext }}</p>

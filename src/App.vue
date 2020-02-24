@@ -2,8 +2,16 @@
   <div id="app">
     <Header/>
     <SearchForm v-on:search="search"/>
+    <div v-if="items===null">
+      <center>
+        <h3>
+          No Results
+        </h3>
+      </center>
+    </div>
+    <div v-else>
     <SearchResults
-      v-if="items.length > 0"
+      v-if="items!=null && items.length > 0"
       v-bind:items="items"
       v-bind:reformattedSearchString="reformattedSearchString"
     />
@@ -14,6 +22,7 @@
       v-on:prev-page="prevPage"
       v-on:next-page="nextPage"
     />
+    </div>
   </div>
 </template>
 
@@ -37,8 +46,8 @@ export default {
       items: [],
       reformattedSearchString: '',
       api: {
-        baseUrl: 'https://stormy-sea-37300.herokuapp.com/subreddit?',
-        //baseUrl: 'http://localhost:8080/subreddit?',
+        //baseUrl: 'https://stormy-sea-37300.herokuapp.com/subreddit?',
+        baseUrl: 'http://localhost:8080/subreddit?',
         order: 'viewCount',
         maxResults: 12,
         q: '',
@@ -74,12 +83,17 @@ export default {
     headers: {'Accept': 'application/json'}
 })
         .then(res => {
-console.log(res);
+          console.log(res);
           this.items = res.data.items;
           this.api.prevPageToken = res.data.before;
           this.api.nextPageToken = res.data.after;
         })
-        .catch(error => console.log(error+apiUrl));
+        .catch(error => {
+          this.items = null;
+          this.api.prevPageToken = null;
+          this.api.nextPageToken = null;
+          console.log(error+apiUrl)
+        });
     }
   }
 };
