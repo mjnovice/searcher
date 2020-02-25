@@ -1,29 +1,37 @@
 <template>
   <div id="app">
     <Header/>
-    <SearchForm v-on:search="search"/>
-    <pulse-loader :loading="searching" :color="'#cc181e'" :size="'45px'"></pulse-loader>
-
-    <div v-if="items===null">
+   <SearchForm v-on:search="search"/>
+    <div v-if="searching">
       <center>
+        <b-spinner label="Loading..."></b-spinner>
         <h3>
-          No Results
+          Fetching search results ...
         </h3>
       </center>
     </div>
     <div v-else>
-    <SearchResults
-      v-if="items!=null && items.length > 0"
-      v-bind:items="items"
-      v-bind:reformattedSearchString="reformattedSearchString"
-    />
-    <Pagination
-      v-if="items.length > 0"
-      v-bind:prevPageToken="api.prevPageToken"
-      v-bind:nextPageToken="api.nextPageToken"
-      v-on:prev-page="prevPage"
-      v-on:next-page="nextPage"
-    />
+      <div v-if="items===null">
+        <center>
+          <h3>
+            No Results
+          </h3>
+        </center>
+      </div>
+      <div v-else>
+        <SearchResults
+          v-if="items!=null && items.length > 0"
+          v-bind:items="items"
+          v-bind:reformattedSearchString="reformattedSearchString"
+        />
+        <Pagination
+          v-if="items.length > 0"
+          v-bind:prevPageToken="api.prevPageToken"
+          v-bind:nextPageToken="api.nextPageToken"
+          v-on:prev-page="prevPage"
+          v-on:next-page="nextPage"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -49,8 +57,8 @@ export default {
       searching: false,
       reformattedSearchString: '',
       api: {
-        //baseUrl: 'https://stormy-sea-37300.herokuapp.com/subreddit?',
-        baseUrl: 'http://localhost:8080/subreddit?',
+        baseUrl: 'https://stormy-sea-37300.herokuapp.com/subreddit?',
+        //baseUrl: 'http://localhost:8080/subreddit?',
         order: 'viewCount',
         maxResults: 12,
         q: '',
